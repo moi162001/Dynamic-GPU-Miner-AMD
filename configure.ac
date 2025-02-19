@@ -1,10 +1,19 @@
-AC_INIT([sgminer-dyn], [1.0.0], [], [sgminer-dyn], [https://github.com/duality-solutions/Dynamic-GPU-Miner-AMD])
+m4_pattern_allow([AC_DEFINE])
+m4_pattern_allow([AC_MSG_ERROR])
 
-AC_PREREQ(2.59)
-AC_CANONICAL_SYSTEM
-AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_SRCDIR([sgminer.c])
+AC_INIT([sgminer-dyn],[1.0.0],[],[sgminer-dyn],[https://github.com/duality-solutions/Dynamic-GPU-Miner-AMD])
 AC_CONFIG_HEADERS([config.h])
+
+AC_DEFINE([CURL_HAS_KEEPALIVE], [1], [Enable keep-alive support])
+
+AC_CONFIG_MACRO_DIRS([m4])
+
+
+AC_PREREQ([2.71])
+AC_CANONICAL_TARGET
+
+AC_CONFIG_SRCDIR([sgminer.c])
+
 
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -14,6 +23,7 @@ AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 
 dnl Make sure anyone changing configure.ac/Makefile.am has a clue
+AC_LINK_IFELSE
 AM_MAINTAINER_MODE
 
 dnl Checks for programs
@@ -21,13 +31,22 @@ AC_PROG_CC
 gl_EARLY
 AC_PROG_GCC_TRADITIONAL
 AM_PROG_CC_C_O
-LT_INIT([disable-shared])
+LT_INIT
 
 gl_INIT
 
 dnl Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS(syslog.h)
+m4_warn([obsolete],
+[The preprocessor macro `STDC_HEADERS' is obsolete.
+  Except in unusual embedded environments, you can safely include all
+  ISO C90 headers unconditionally.])dnl
+# Autoupdate added the next two lines to ensure that your configure
+# script's behavior did not change.  They are probably safe to remove.
+AC_CHECK_INCLUDES_DEFAULT
+AC_PROG_EGREP
+
+AC_CHECK_HEADERS([sys/mman.h])
+AC_CHECK_FUNCS([mprotect])
 
 AC_FUNC_ALLOCA
 
@@ -144,12 +163,12 @@ if test "x$has_winpthread" != xtrue; then
 fi
 
 AC_ARG_ENABLE([adl],
-	[AC_HELP_STRING([--disable-adl],[Override detection and disable building with ADL])],
+	[AS_HELP_STRING([--disable-adl],[Override detection and disable building with ADL])],
 	[adl=$enableval]
 	)
 
 AC_ARG_ENABLE([adl_checks],
-	[AC_HELP_STRING([--disable-adl-checks],[Override detection and assume ADL is available])],
+	[AS_HELP_STRING([--disable-adl-checks],[Override detection and assume ADL is available])],
 	[adl_checks=$enableval]
 	)
 
@@ -189,7 +208,7 @@ AC_ARG_ENABLE([git-version],
 		[wantgitver=$enableval], [wantgitver=yes])
 
 AC_ARG_WITH([build_number],
-	[AC_HELP_STRING([--with-build-number], [Specify a build number.])],
+	[AS_HELP_STRING([--with-build-number],[Specify a build number.])],
 	[BUILD_NUMBER="$withval"]
 	)
 AC_SUBST([BUILD_NUMBER])
@@ -198,7 +217,7 @@ AM_CONDITIONAL([USE_BUILD_NUMBER], [test x$BUILD_NUMBER != x])
 curses="auto"
 
 AC_ARG_WITH([curses],
-	[AC_HELP_STRING([--without-curses],[Compile support for curses TUI (default enabled)])],
+	[AS_HELP_STRING([--without-curses],[Compile support for curses TUI (default enabled)])],
 	[curses=$withval]
 	)
 if test "x$curses" = "xno"; then
@@ -240,7 +259,7 @@ if test "x$have_sgminer_sdk" = "xtrue"; then
 fi
 
 AC_ARG_ENABLE([libcurl],
-	[AC_HELP_STRING([--disable-libcurl],[Disable building with libcurl for getwork and GBT support])],
+	[AS_HELP_STRING([--disable-libcurl],[Disable building with libcurl for getwork and GBT support])],
 	[libcurl=$enableval]
 	)
 
