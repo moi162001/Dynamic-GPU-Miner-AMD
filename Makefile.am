@@ -99,6 +99,3 @@ sgminer_SOURCES += algorithm/argon2d/argon2ref/blake2/blake2b.c  algorithm/argon
 sgminer_SOURCES += algorithm/argon2d/argon2d.c algorithm/argon2d/argon2d.h
 
 bin_SCRIPTS	= $(top_srcdir)/kernel/*.cl
-
-
-  
