@@ -23,7 +23,7 @@ void argon2d_dyn_hash( void *output, const void *input )
     context.free_cbk = NULL;
     context.flags = DEFAULT_ARGON2_FLAG; // = ARGON2_DEFAULT_FLAGS
     // main configurable Argon2 hash parameters
-    context.m_cost = 500;  // Memory in KiB (512KB)
+    context.m_cost = 1000;  // Memory in KiB (1024KB)
     context.lanes = 8;     // Degree of Parallelism
     context.threads = 1;   // Threads
     context.t_cost = 2;    // Iterations
